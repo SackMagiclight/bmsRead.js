@@ -19,6 +19,7 @@
             border-color: #48a;
         }
     </style>
+    <script type="text/javascript" src="sha256.js"></script>
 </head>
 
 <body>
@@ -36,12 +37,34 @@
             },
             'onRead': function (data) {
                 console.log(data);
+                const datas = [];
                 Object.keys(data.files).forEach(function (key) {
                     console.log(key);
                     for(let d of data.files[key]){
-                        $("ul").append(`<li>KEY:${key}, TITLE:${d.title}</li>`);
+                        var shaObj = new jsSHA("SHA-256", "BYTES");
+                        shaObj.update(d.buffer);
+                        var sha256digest = shaObj.getHash("HEX");
+                        const json = {
+                            "lr2_bmsid":"",
+                            "title":d.title,
+                            "level":d.playlevel,
+                            "eval":0,
+                            "artist":d.artist,
+                            "url":"",
+                            "url_pack":"",
+                            "name_pack":"",
+                            "url_diff":"",
+                            "name_diff":"DL",
+                            "comment":"",
+                            "tag":"",
+                            "md5":d.bmshash,
+                            "sha256":sha256digest
+                        };
+                        datas.push(json);
                     }
                 });
+
+                $("ul").append(`<li>${JSON.stringify(datas)}</li>`);
             }
         });
     </script>

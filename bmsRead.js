@@ -40,7 +40,8 @@
             var ReadBMS=BMSFileRead(DECODE_FILE(result),file.name);
         }
 
-        var bit128 = MD5_hash(ArrayBufferToString(result));
+        var buffer = ArrayBufferToString(result);
+        var bit128 = MD5_hash(buffer);
         var i,c;
         var fhash="";
         for(i = 0; i < 16; i++) {
@@ -63,6 +64,7 @@
         fileinfo[dir][fileNo]['bmshash_old']=ReadBMS.bmshash;
         fileinfo[dir][fileNo]['bmshash']=fhash;
         fileinfo[dir][fileNo]['totalnotes']=ReadBMS.totalnotes;
+        fileinfo[dir][fileNo]['buffer']=buffer;
 
         doneQuery += 1;
 
